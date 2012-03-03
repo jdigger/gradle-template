@@ -1,0 +1,73 @@
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'groovy'
+
+dependencies {
+    compile "org.slf4j:slf4j-api:${slf4j_version}"
+    compile "com.google.code.findbugs:jsr305:${jsr305_version}"
+
+    testRuntime "ch.qos.logback:logback-classic:${logback_classic_version}"
+}
+
+// **************************************************************************
+//
+// INTELLIJ IDEA CONFIGURATION
+//
+// **************************************************************************
+
+apply plugin: 'idea'
+
+
+idea {
+    module {
+        excludeDirs += file('.gradle-wrapper')
+    }
+
+    project {
+        wildcards += ['?*.gradle']
+        jdkName = '1.6'
+        ipr.withXml {xp ->
+            Node root = xp.asNode()
+            root.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'Git'
+
+            def codeStyleSettingsManager = root.find {it.component.@name == 'CodeStyleSettingsManager' }
+            if (!codeStyleSettingsManager) {
+                NodeBuilder builder = NodeBuilder.newInstance()
+                builder.current = root
+
+                builder.component(name: 'CodeStyleSettingsManager') {
+                    option(name: 'USE_PER_PROJECT_SETTINGS', value: 'true')
+                    option(name: 'PER_PROJECT_SETTINGS') {
+                        value() {
+                            ['groovy', 'java', 'scala', 'sql', 'xml', 'js', 'jsp', 'php', 'yml'].each {lang ->
+                                ADDITIONAL_INDENT_OPTIONS(fileType: lang) {
+                                    option(name: 'INDENT_SIZE', value: '4')
+                                    option(name: 'CONTINUATION_INDENT_SIZE', value: '8')
+                                    option(name: 'TAB_SIZE', value: '4')
+                                    option(name: 'USE_TAB_CHARACTER', value: 'false')
+                                    option(name: 'SMART_TABS', value: 'false')
+                                    option(name: 'LABEL_INDENT_SIZE', value: '0')
+                                    option(name: 'LABEL_INDENT_ABSOLUTE', value: 'false')
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// **************************************************************************
+//
+// GRADLE WRAPPER
+//
+// **************************************************************************
+
+task wrapper(type: Wrapper, group: 'Other', description: 'Creates the Gradle wrapper') {
+    gradleVersion = '1.0-milestone-8a'
+    jarFile = '.gradle-wrapper/gradle-wrapper.jar'
+}
