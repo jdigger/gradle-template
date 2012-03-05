@@ -4,7 +4,6 @@ Project for creating new projects.
 
 # TODO #
 
-* Create target top-level directory
 * Initialize Git project
   * .gitignore
   * README.md
@@ -19,3 +18,4 @@ Project for creating new projects.
 # Done #
 
 * Accept CLI arguments
+* Create target top-level directory
