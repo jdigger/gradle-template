@@ -4,11 +4,26 @@ repositories {
 
 apply plugin: 'groovy'
 
+sourceCompatibility = '1.6'
+
 dependencies {
+    groovy "org.codehaus.groovy:groovy:${groovy_version}", {
+        exclude group: 'asm', module: 'asm-commons'
+        exclude group: 'asm', module: 'asm-tree'
+        exclude group: 'asm', module: 'asm-util'
+        exclude group: 'asm', module: 'asm-analysis'
+    }
+
     compile "org.slf4j:slf4j-api:${slf4j_version}"
     compile "com.google.code.findbugs:jsr305:${jsr305_version}"
+    compile "commons-cli:commons-cli:${commons_cli_version}"
+    compile "com.google.guava:guava:${guava_version}"
 
     testRuntime "ch.qos.logback:logback-classic:${logback_classic_version}"
+
+    testCompile "org.spockframework:spock-core:${spock_version}", {
+        exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+    }
 }
 
 // **************************************************************************
@@ -29,12 +44,12 @@ idea {
         wildcards += ['?*.gradle']
         jdkName = '1.6'
         ipr.withXml {xp ->
-            Node root = xp.asNode()
+            def root = xp.asNode()
             root.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'Git'
 
             def codeStyleSettingsManager = root.find {it.component.@name == 'CodeStyleSettingsManager' }
             if (!codeStyleSettingsManager) {
-                NodeBuilder builder = NodeBuilder.newInstance()
+                def builder = NodeBuilder.newInstance()
                 builder.current = root
 
                 builder.component(name: 'CodeStyleSettingsManager') {
@@ -59,7 +74,6 @@ idea {
         }
     }
 }
-
 
 // **************************************************************************
 //
