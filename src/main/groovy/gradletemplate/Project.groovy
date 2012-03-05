@@ -1,6 +1,8 @@
 package gradletemplate
 
+import com.google.common.io.Files
 import groovy.transform.Canonical
+import org.eclipse.jgit.api.Git
 
 @Canonical
 class Project {
@@ -41,6 +43,12 @@ class Project {
 
     void build() {
         projectDir.mkdir()
+
+        Files.touch(new File(projectDir, '.gitignore'))
+        Files.touch(new File(projectDir, 'README.md'))
+        Git git = Git.init().setDirectory(projectDir).call()
+        git.add().addFilepattern('.gitignore').addFilepattern('README.md').call()
+        git.commit().setMessage('initial').call()
     }
 
 }

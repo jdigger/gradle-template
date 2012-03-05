@@ -1,5 +1,9 @@
 repositories {
     mavenCentral()
+    maven {
+        name 'jgit-repository'
+        url 'http://download.eclipse.org/jgit/maven'
+    }
 }
 
 apply plugin: 'groovy'
@@ -18,6 +22,8 @@ dependencies {
     compile "com.google.code.findbugs:jsr305:${jsr305_version}"
     compile "commons-cli:commons-cli:${commons_cli_version}"
     compile "com.google.guava:guava:${guava_version}"
+
+    compile "org.eclipse.jgit:org.eclipse.jgit:${jgit_version}"
 
     testRuntime "ch.qos.logback:logback-classic:${logback_classic_version}"
 
@@ -50,6 +56,7 @@ idea {
             def codeStyleSettingsManager = root.find {it.component.@name == 'CodeStyleSettingsManager' }
             if (!codeStyleSettingsManager) {
                 def builder = NodeBuilder.newInstance()
+                //noinspection GroovyAccessibility
                 builder.current = root
 
                 builder.component(name: 'CodeStyleSettingsManager') {

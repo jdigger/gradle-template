@@ -1,6 +1,8 @@
 package gradletemplate
 
 import com.google.common.io.Files
+import git.Commit
+import org.eclipse.jgit.api.Git
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -17,9 +19,17 @@ class ProjectSpec extends Specification {
         when:
         project.build()
 
+        and:
+        new File(project.projectDir, '.git').isDirectory()
+
+        Git git = Git.open(project.projectDir)
+        List<Commit> commits = git.log().call().collect {new Commit(git.repository, it)}
+        commits.size() == 1
+        Commit commit = commits[0]
+
         then:
-        new File(project.parentDir, project.name).exists()
-        new File(project.parentDir, project.name).isDirectory()
+        commit.message == 'initial'
+        commit.tree.paths == ['.gitignore', 'README.md']
 
         cleanup:
         deleteDirectory(project.parentDir)
