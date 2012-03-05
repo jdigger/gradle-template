@@ -1,6 +1,5 @@
 package gradletemplate
 
-import com.google.common.io.Files
 import groovy.transform.Canonical
 import org.eclipse.jgit.api.Git
 
@@ -44,11 +43,24 @@ class Project {
     void build() {
         projectDir.mkdir()
 
-        Files.touch(new File(projectDir, '.gitignore'))
-        Files.touch(new File(projectDir, 'README.md'))
-        Git git = Git.init().setDirectory(projectDir).call()
-        git.add().addFilepattern('.gitignore').addFilepattern('README.md').call()
-        git.commit().setMessage('initial').call()
+        streamToFile('common/.gitignore', new File(projectDir, '.gitignore'))
+        streamToFile('common/README.md', new File(projectDir, 'README.md'))
+        Git.init().setDirectory(projectDir).call().with {
+            add().addFilepattern('.gitignore').addFilepattern('README.md').call()
+            commit().setMessage('initial').call()
+        }
+    }
+
+
+    static void streamToFile(String inputResourceName, File outFile) {
+        InputStream inputStream = ClassLoader.getSystemResourceAsStream(inputResourceName)
+        outFile.withPrintWriter {PrintWriter writer ->
+            inputStream.withReader {Reader reader ->
+                reader.eachLine {
+                    writer.println(it)
+                }
+            }
+        }
     }
 
 }

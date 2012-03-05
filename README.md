@@ -4,7 +4,6 @@ Project for creating new projects.
 
 # TODO #
 
-* Create default .gitignore and README.md files
 * Create src dir structure for kind of project (Java, Groovy)
 * Create Gradle wrapper
 * Create base build.gradle and gradle.properties files
@@ -20,3 +19,4 @@ Project for creating new projects.
   * .gitignore
   * README.md
   * git add .gitignore README.md
+* Create default .gitignore and README.md files
