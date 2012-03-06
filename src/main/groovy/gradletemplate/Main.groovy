@@ -1,16 +1,13 @@
 package gradletemplate
 
 import groovy.transform.InheritConstructors
+import groovy.util.logging.Slf4j
 
 /**
  * The entry-point for the program.
  */
+@Slf4j
 class Main {
-
-    Main() {
-
-    }
-
 
     void run(Options options) {
         if (options == null) {
@@ -18,7 +15,8 @@ class Main {
         }
 
         if (options.isGood) {
-
+            BaseProject project = new BaseProject(name: options.projectName)
+            project.build()
         }
         else {
             throw new BadOptionsException()
@@ -52,11 +50,15 @@ class Main {
 
         CliBuilder cli
         boolean isGood = false
+        private String _projectName
+        private Class<? extends BaseProject> projectClass
 
 
         protected Options() {
-            cli = new CliBuilder(usage: 'gradletemplate')
+            cli = new CliBuilder(usage: 'gradletemplate [options] <projectName>')
             cli.h(longOpt: 'help', 'Show this help message')
+            cli.g(longOpt: 'groovy', 'Create a Groovy project (default)')
+            cli.j(longOpt: 'java', 'Create a Java project')
         }
 
 
@@ -72,11 +74,31 @@ class Main {
             }
             else {
                 def options = cli.parse(args)
-                isGood = true
 
+                if (options.arguments().size() == 1) {
+                    _projectName = options.arguments()[0]
+                    if (options.j) {
+
+                    }
+                    isGood = true
+                }
+                else {
+                    log.error("No project name")
+                    isGood = false
+                }
             }
         }
 
+
+        String getProjectName() {
+            verifyGood()
+            _projectName
+        }
+
+
+        private void verifyGood() {
+            if (!isGood) throw new IllegalStateException("Not in a good state")
+        }
 
     }
 

@@ -20,7 +20,10 @@ class MainSpec extends Specification {
 
     def 'creates project top-level dir'() {
         given:
-        main.run(new Options(['MainSpecTestProj'] as String[]))
+        Options options = new Options(['MainSpecTestProj'] as String[])
+
+        expect:
+        options.projectName == 'MainSpecTestProj'
     }
 
 }
