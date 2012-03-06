@@ -63,7 +63,7 @@ class Main {
 
 
         protected Options() {
-            cli = new CliBuilder(usage: 'gradletemplate [options] <projectName>')
+            cli = new CliBuilder(usage: 'gradle-template [options] <projectName>')
             cli.h(longOpt: 'help', 'Show this help message')
             cli.g(longOpt: 'groovy', 'Create a Groovy project (default)')
             cli.j(longOpt: 'java', 'Create a Java project')

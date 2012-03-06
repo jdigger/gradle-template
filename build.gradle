@@ -25,7 +25,7 @@ dependencies {
 
     compile "org.eclipse.jgit:org.eclipse.jgit:${jgit_version}"
 
-    testRuntime "ch.qos.logback:logback-classic:${logback_classic_version}"
+    runtime "ch.qos.logback:logback-classic:${logback_classic_version}"
 
     testCompile "org.spockframework:spock-core:${spock_version}", {
         exclude group: 'org.codehaus.groovy', module: 'groovy-all'
