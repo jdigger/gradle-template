@@ -75,7 +75,7 @@ class BaseProject {
 
 
     protected void createMinimumFiles() {
-        streamToFile('common/.gitignore', new File(projectDir, '.gitignore'))
+        streamToFile('common/gitignore', new File(projectDir, '.gitignore'))
         streamToFile('common/README.md', new File(projectDir, 'README.md'))
         Git.open(projectDir).with {
             add().addFilepattern('.gitignore').addFilepattern('README.md').call()
@@ -95,6 +95,9 @@ class BaseProject {
 
     protected static void streamToFile(String inputResourceName, File outFile) {
         InputStream inputStream = ClassLoader.getSystemResourceAsStream(inputResourceName)
+        if (inputStream == null) {
+            throw new IllegalArgumentException("Could not find ${inputResourceName} on the classpath")
+        }
         outFile.withPrintWriter {PrintWriter writer ->
             inputStream.withReader {Reader reader ->
                 reader.eachLine {
