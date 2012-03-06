@@ -7,8 +7,10 @@ repositories {
 }
 
 apply plugin: 'groovy'
+apply plugin: 'application'
 
 sourceCompatibility = '1.6'
+mainClassName = 'gradletemplate.Main'
 
 dependencies {
     groovy "org.codehaus.groovy:groovy:${groovy_version}", {
