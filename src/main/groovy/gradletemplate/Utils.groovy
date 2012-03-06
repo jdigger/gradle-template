@@ -1,5 +1,8 @@
 package gradletemplate
 
+import com.google.common.io.Files
+import com.google.common.io.InputSupplier
+
 /**
  * Misc functions
  */
@@ -10,6 +13,7 @@ class Utils {
         if (dir.canonicalFile == new File('.').canonicalFile) {
             throw new IllegalArgumentException("Can't delete current directory")
         }
+
         dir.eachDir(this.&deleteDirectory)
         dir.eachFile { file ->
             file.delete()
@@ -19,16 +23,7 @@ class Utils {
 
     static void streamToFile(String inputResourceName, File outFile) {
         InputStream inputStream = ClassLoader.getSystemResourceAsStream(inputResourceName)
-        if (inputStream == null) {
-            throw new IllegalArgumentException("Could not find ${inputResourceName} on the classpath")
-        }
-        outFile.withPrintWriter {PrintWriter writer ->
-            inputStream.withReader {Reader reader ->
-                reader.eachLine {
-                    writer.println(it)
-                }
-            }
-        }
+        Files.copy({inputStream} as InputSupplier<InputStream>, outFile)
     }
 
 }
