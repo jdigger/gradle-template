@@ -81,6 +81,11 @@ class MetaClassMixin {
     }
 
 
+    def metaClassFor(Object obj) {
+        metaClassFor(obj.class)
+    }
+
+
     def metaClassFor(Class clazz, Closure closure) {
         metaClassFor(clazz).call(closure)
     }

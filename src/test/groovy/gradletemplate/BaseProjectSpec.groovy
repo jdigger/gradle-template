@@ -1,6 +1,5 @@
 package gradletemplate
 
-import com.google.common.io.Files
 import git.Commit
 import org.eclipse.jgit.api.Git
 import spock.lang.Specification
@@ -12,6 +11,12 @@ import spock.lang.Subject
 class BaseProjectSpec extends Specification {
     def project = createProject()
 
+    def cleanup() {
+        savedMetaClasses.each { clazz, metaClass ->
+            GroovySystem.metaClassRegistry.setMetaClass(clazz, metaClass)
+        }
+    }
+
 
     def createProject() {
         new BaseProject()
@@ -20,7 +25,7 @@ class BaseProjectSpec extends Specification {
 
     def 'build base'() {
         given:
-        project.parentDir = Files.createTempDir()
+        project.testMode = true
         project.name = 'BaseProjectSpec_build'
 
         when:

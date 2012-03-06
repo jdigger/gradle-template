@@ -1,6 +1,5 @@
 package gradletemplate
 
-import com.google.common.io.Files
 import spock.lang.Subject
 
 @Subject(GroovyProject)
@@ -14,7 +13,7 @@ class GroovyProjectSpec extends BaseProjectSpec {
 
     def 'build groovy'() {
         given:
-        project.parentDir = Files.createTempDir()
+        project.testMode = true
         project.name = 'GroovyProjectSpec_build'
 
         when:

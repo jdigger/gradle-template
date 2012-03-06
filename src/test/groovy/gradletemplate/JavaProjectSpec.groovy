@@ -1,6 +1,5 @@
 package gradletemplate
 
-import com.google.common.io.Files
 import spock.lang.Subject
 
 @Subject(JavaProject)
@@ -14,7 +13,7 @@ class JavaProjectSpec extends BaseProjectSpec {
 
     def 'build java'() {
         given:
-        project.parentDir = Files.createTempDir()
+        project.testMode = true
         project.name = 'JavaProjectSpec_build'
 
         when:

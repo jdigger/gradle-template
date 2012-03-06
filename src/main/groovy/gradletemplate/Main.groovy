@@ -1,6 +1,5 @@
 package gradletemplate
 
-import com.google.common.io.Files
 import groovy.transform.InheritConstructors
 import groovy.util.logging.Slf4j
 
@@ -20,7 +19,7 @@ class Main {
         if (options.isGood) {
             project = options.projectClass.newInstance()
             if (options.testingMode)
-                project.parentDir = Files.createTempDir()
+                project.testMode = true
             project.name = options.projectName
         }
         else {
