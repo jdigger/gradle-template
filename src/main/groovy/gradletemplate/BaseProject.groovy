@@ -13,6 +13,7 @@ class BaseProject {
 
     @Lazy File parentDir = {testMode ? Files.createTempDir() : new File('.').canonicalFile}()
     @Lazy File projectDir = {new File(parentDir, name)}()
+    @Lazy File gradleWrapperBootstrapDir = {new File(projectDir, '.gradle-wrapper')}()
 
     @Lazy private File srcDir = {new File(projectDir, 'src')}()
     @Lazy private File mainSrcDir = {new File(srcDir, 'main')}()
@@ -32,6 +33,7 @@ class BaseProject {
         createGitRepo()
         createMinimumFiles()
         createSrcDirStructure()
+        createGradleWrapper()
     }
 
 
@@ -58,6 +60,16 @@ class BaseProject {
         sourceDirs.each {File dir ->
             log.debug("Creating $dir")
             dir.mkdirs()
+        }
+    }
+
+
+    protected def createGradleWrapper() {
+        GradleWrapper.copy(this)
+
+        Git.open(projectDir).with {
+            add().addFilepattern('gradlew').addFilepattern('gradlew.bat').addFilepattern('.gradle-wrapper').call()
+            commit().setMessage('Adds the Gradle wrapper.').call()
         }
     }
 

@@ -7,7 +7,7 @@ import spock.lang.Subject
 
 @Subject(BaseProject)
 @Mixin(MetaClassMixin)
-@SuppressWarnings("GroovyAccessibility")
+@SuppressWarnings(["GroovyAccessibility", "GroovyLabeledStatement"])
 class BaseProjectSpec extends Specification {
     def project = createProject()
 
@@ -31,14 +31,11 @@ class BaseProjectSpec extends Specification {
         when:
         project.build()
 
-        and:
-        new File(project.projectDir, '.git').isDirectory()
-
         Git git = Git.open(project.projectDir)
         List<Commit> commits = git.log().call().collect {new Commit(git.repository, it)}.reverse()
 
         then:
-        commits.size() == 2
+        commits.size() == 3
 
         Commit commit0 = commits[0]
         commit0.message == 'bare project'
@@ -47,6 +44,10 @@ class BaseProjectSpec extends Specification {
         Commit commit1 = commits[1]
         commit1.message == 'initial'
         commit1.tree.paths == ['.gitignore', 'README.md']
+
+        Commit commit2 = commits[2]
+        commit2.message == 'Adds the Gradle wrapper.'
+        commit2.tree.paths.containsAll(['gradlew', 'gradlew.bat', '.gradle-wrapper'])
 
         project.srcDir.exists()
         project.mainSrcDir.exists()

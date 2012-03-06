@@ -34,6 +34,18 @@ dependencies {
     }
 }
 
+
+applicationDistribution.from('.') {
+    into 'gradle-wrapper'
+    include 'gradlew*'
+}
+
+
+applicationDistribution.from('.gradle-wrapper') {
+    into 'gradle-wrapper/.gradle-wrapper'
+    include '*'
+}
+
 // **************************************************************************
 //
 // INTELLIJ IDEA CONFIGURATION
