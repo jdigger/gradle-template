@@ -50,15 +50,7 @@ class BaseProjectSpec extends Specification {
         project.testResourcesDir.exists()
 
         cleanup:
-        deleteDirectory(project.parentDir)
-    }
-
-
-    void deleteDirectory(File dir) {
-        dir.eachDir(this.&deleteDirectory)
-        dir.eachFile { file ->
-            file.delete()
-        }
+        Utils.deleteDirectory(project.parentDir)
     }
 
 }

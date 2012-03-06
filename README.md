@@ -4,11 +4,10 @@ Project for creating new projects.
 
 # TODO #
 
-* Create src dir structure for kind of project (Java, Groovy)
+* Gradle create "application" of this
 * Create Gradle wrapper
 * Create base build.gradle and gradle.properties files
 * Add option to add GitHub/BitBucket support.
-* Gradle create "application" of this
 
 
 # Done #
@@ -20,3 +19,4 @@ Project for creating new projects.
   * README.md
   * git add .gitignore README.md
 * Create default .gitignore and README.md files
+* Create src dir structure for kind of project (Java, Groovy)

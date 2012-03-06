@@ -3,26 +3,26 @@ package gradletemplate
 import com.google.common.io.Files
 import spock.lang.Subject
 
-@Subject(GroovyProject)
+@Subject(JavaProject)
 @Mixin(MetaClassMixin)
-class GroovyProjectSpec extends BaseProjectSpec {
+class JavaProjectSpec extends BaseProjectSpec {
 
     def createProject() {
-        new GroovyProject()
+        new JavaProject()
     }
 
 
-    def 'build groovy'() {
+    def 'build java'() {
         given:
         project.parentDir = Files.createTempDir()
-        project.name = 'GroovyProjectSpec_build'
+        project.name = 'JavaProjectSpec_build'
 
         when:
         project.build()
 
         then:
-        project.mainGroovyDir.exists()
-        project.testGroovyDir.exists()
+        project.mainJavaDir.exists()
+        project.testJavaDir.exists()
 
         cleanup:
         Utils.deleteDirectory(project.parentDir)

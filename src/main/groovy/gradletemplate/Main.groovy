@@ -1,5 +1,6 @@
 package gradletemplate
 
+import com.google.common.io.Files
 import groovy.transform.InheritConstructors
 import groovy.util.logging.Slf4j
 
@@ -9,26 +10,32 @@ import groovy.util.logging.Slf4j
 @Slf4j
 class Main {
 
-    void run(Options options) {
+    static BaseProject createProject(Options options) {
+        BaseProject project
+
         if (options == null) {
             throw new BadOptionsException()
         }
 
         if (options.isGood) {
-            BaseProject project = new BaseProject(name: options.projectName)
-            project.build()
+            project = options.projectClass.newInstance()
+            if (options.testingMode)
+                project.parentDir = Files.createTempDir()
+            project.name = options.projectName
         }
         else {
             throw new BadOptionsException()
         }
+
+        project
     }
 
 
     public static void main(String[] args) {
         Options options = new Options(args)
         try {
-            Main main = new Main()
-            main.run(options)
+            BaseProject project = Main.createProject(options)
+            project.build()
         }
         catch (BadOptionsException exp) {
             options.cli.usage()
@@ -51,7 +58,8 @@ class Main {
         CliBuilder cli
         boolean isGood = false
         private String _projectName
-        private Class<? extends BaseProject> projectClass
+        Class<? extends BaseProject> projectClass
+        boolean testingMode = false
 
 
         protected Options() {
@@ -59,6 +67,7 @@ class Main {
             cli.h(longOpt: 'help', 'Show this help message')
             cli.g(longOpt: 'groovy', 'Create a Groovy project (default)')
             cli.j(longOpt: 'java', 'Create a Java project')
+            cli._(longOpt: 'X_testing', 'Create the project in a temporary directory')
         }
 
 
@@ -78,8 +87,16 @@ class Main {
                 if (options.arguments().size() == 1) {
                     _projectName = options.arguments()[0]
                     if (options.j) {
-
+                        projectClass = JavaProject
                     }
+                    else {
+                        projectClass = GroovyProject
+                    }
+
+                    if (options.X_testing) {
+                        testingMode = true
+                    }
+
                     isGood = true
                 }
                 else {
