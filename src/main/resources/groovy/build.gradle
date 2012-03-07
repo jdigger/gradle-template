@@ -1,0 +1,58 @@
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'groovy'
+
+group = 'THEGROUP'
+archivesBaseName = 'PROJECTNAME'
+
+sourceCompatibility = '1.6'
+
+dependencies {
+    groovy "org.codehaus.groovy:groovy:${groovy_version}", {
+        exclude group: 'asm', module: 'asm-commons'
+        exclude group: 'asm', module: 'asm-tree'
+        exclude group: 'asm', module: 'asm-util'
+        exclude group: 'asm', module: 'asm-analysis'
+    }
+
+    compile "org.slf4j:jcl-over-slf4j:${slf4j_version}"
+    compile "org.slf4j:slf4j-api:${slf4j_version}"
+
+    runtime "ch.qos.logback:logback-classic:${logback_classic_version}"
+
+    testCompile "org.spockframework:spock-core:${spock_version}", {
+        exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+    }
+}
+
+// code-quality
+apply plugin: 'findbugs'
+apply plugin: 'jdepend'
+apply plugin: 'pmd'
+apply plugin: 'codenarc'
+
+// IDE support
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+
+afterEvaluate {
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives sourcesJar
+    }
+
+    javadoc {
+        title = "${name.charAt(0).toUpperCase()}${name.substring(1, name.length())} API ${version}"
+        if (file("src/main/java/overview.html").exists()) {
+            options.overview = file("src/main/java/overview.html").absolutePath
+        }
+        options.links = ["http://download.oracle.com/javase/6/docs/api"]
+    }
+}

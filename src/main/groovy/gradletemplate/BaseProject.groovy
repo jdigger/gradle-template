@@ -1,6 +1,7 @@
 package gradletemplate
 
 import com.google.common.io.Files
+import com.google.common.io.InputSupplier
 import groovy.util.logging.Slf4j
 import org.eclipse.jgit.api.Git
 
@@ -34,6 +35,7 @@ class BaseProject {
         createMinimumFiles()
         createSrcDirStructure()
         createGradleWrapper()
+        createGradleBuildFiles()
     }
 
 
@@ -71,6 +73,28 @@ class BaseProject {
             add().addFilepattern('gradlew').addFilepattern('gradlew.bat').addFilepattern('.gradle-wrapper').call()
             commit().setMessage('Adds the Gradle wrapper.').call()
         }
+    }
+
+
+    protected void createGradleBuildFiles() {
+        Files.copy(buildGradle, new File(projectDir, 'build.gradle'))
+        Files.copy(gradleProperties, new File(projectDir, 'gradle.properties'))
+        Git.open(projectDir).with {
+            add().addFilepattern('build.gradle').addFilepattern('gradle.properties').call()
+            commit().setMessage('Adds a basic Gradle build configuration.').call()
+        }
+    }
+
+
+    InputSupplier getBuildGradle() {
+        InputStream inputStream = ClassLoader.getSystemResourceAsStream('groovy/build.gradle')
+        ({inputStream} as InputSupplier<InputStream>)
+    }
+
+
+    InputSupplier getGradleProperties() {
+        InputStream inputStream = ClassLoader.getSystemResourceAsStream('groovy/gradle.properties')
+        ({inputStream} as InputSupplier<InputStream>)
     }
 
 }

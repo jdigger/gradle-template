@@ -1,5 +1,6 @@
 package gradletemplate
 
+import com.google.common.io.InputSupplier
 import groovy.transform.Canonical
 
 @Canonical
@@ -13,6 +14,18 @@ class JavaProject extends BaseProject {
     List<File> getSourceDirs() {
         List<File> srcDirs = super.getSourceDirs()
         srcDirs << mainJavaDir << testJavaDir
+    }
+
+
+    InputSupplier getBuildGradle() {
+        InputStream inputStream = ClassLoader.getSystemResourceAsStream('java/build.gradle')
+        ({inputStream} as InputSupplier<InputStream>)
+    }
+
+
+    InputSupplier getGradleProperties() {
+        InputStream inputStream = ClassLoader.getSystemResourceAsStream('java/gradle.properties')
+        ({inputStream} as InputSupplier<InputStream>)
     }
 
 }

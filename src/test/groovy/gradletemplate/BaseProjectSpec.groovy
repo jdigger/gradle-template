@@ -35,7 +35,7 @@ class BaseProjectSpec extends Specification {
         List<Commit> commits = git.log().call().collect {new Commit(git.repository, it)}.reverse()
 
         then:
-        commits.size() == 3
+        commits.size() == 4
 
         Commit commit0 = commits[0]
         commit0.message == 'bare project'
