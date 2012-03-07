@@ -26,4 +26,11 @@ class Utils {
         Files.copy({inputStream} as InputSupplier<InputStream>, outFile)
     }
 
+
+    static InputSupplier getInputSupplierForResource(String resourceName) {
+        InputStream inputStream = ClassLoader.getSystemResourceAsStream(resourceName)
+        assert inputStream
+        ({inputStream} as InputSupplier<InputStream>)
+    }
+
 }

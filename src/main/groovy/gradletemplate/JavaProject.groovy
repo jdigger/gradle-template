@@ -18,14 +18,12 @@ class JavaProject extends BaseProject {
 
 
     InputSupplier getBuildGradle() {
-        InputStream inputStream = ClassLoader.getSystemResourceAsStream('java/build.gradle')
-        ({inputStream} as InputSupplier<InputStream>)
+        Utils.getInputSupplierForResource('java/build.gradle')
     }
 
 
     InputSupplier getGradleProperties() {
-        InputStream inputStream = ClassLoader.getSystemResourceAsStream('java/gradle.properties')
-        ({inputStream} as InputSupplier<InputStream>)
+        Utils.getInputSupplierForResource('java/gradle.properties')
     }
 
 }

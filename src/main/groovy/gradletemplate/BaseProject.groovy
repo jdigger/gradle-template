@@ -87,14 +87,12 @@ class BaseProject {
 
 
     InputSupplier getBuildGradle() {
-        InputStream inputStream = ClassLoader.getSystemResourceAsStream('groovy/build.gradle')
-        ({inputStream} as InputSupplier<InputStream>)
+        Utils.getInputSupplierForResource('groovy/build.gradle')
     }
 
 
     InputSupplier getGradleProperties() {
-        InputStream inputStream = ClassLoader.getSystemResourceAsStream('groovy/gradle.properties')
-        ({inputStream} as InputSupplier<InputStream>)
+        Utils.getInputSupplierForResource('groovy/gradle.properties')
     }
 
 }

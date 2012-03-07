@@ -18,16 +18,12 @@ class GroovyProject extends BaseProject {
 
 
     InputSupplier getBuildGradle() {
-        InputStream inputStream = ClassLoader.getSystemResourceAsStream('groovy/build.gradle')
-        assert inputStream
-        ({inputStream} as InputSupplier<InputStream>)
+        Utils.getInputSupplierForResource('groovy/build.gradle')
     }
 
 
     InputSupplier getGradleProperties() {
-        InputStream inputStream = ClassLoader.getSystemResourceAsStream('groovy/gradle.properties')
-        assert inputStream
-        ({inputStream} as InputSupplier<InputStream>)
+        Utils.getInputSupplierForResource('groovy/gradle.properties')
     }
 
 }
