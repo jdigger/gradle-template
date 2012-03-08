@@ -11,6 +11,7 @@ class BaseProject {
     String name
 
     protected boolean testMode = false
+    String remoteRepo
 
     @Lazy File parentDir = {testMode ? Files.createTempDir() : new File('.').canonicalFile}()
     @Lazy File projectDir = {new File(parentDir, name)}()
@@ -36,6 +37,7 @@ class BaseProject {
         createSrcDirStructure()
         createGradleWrapper()
         createGradleBuildFiles()
+        pushToRemote()
     }
 
 
@@ -82,6 +84,26 @@ class BaseProject {
         Git.open(projectDir).with {
             add().addFilepattern('build.gradle').addFilepattern('gradle.properties').call()
             commit().setMessage('Adds a basic Gradle build configuration.').call()
+        }
+    }
+
+
+    protected void pushToRemote() {
+        if (remoteRepo) {
+            final Git git = Git.open(projectDir)
+            git.repository.config.with {
+                setString('remote', 'origin', 'url', remoteRepo)
+                setString('remote', 'origin', 'fetch', '+refs/heads/*:refs/remotes/origin/*')
+                save()
+            }
+
+            git.push().setPushAll().setRemote('origin').call()
+
+            git.repository.config.with {
+                setString('branch', 'master', 'remote', 'origin')
+                setString('branch', 'master', 'merge', 'refs/heads/master')
+                save()
+            }
         }
     }
 

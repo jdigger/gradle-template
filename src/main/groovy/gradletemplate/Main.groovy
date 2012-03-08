@@ -21,6 +21,7 @@ class Main {
             if (options.testingMode)
                 project.testMode = true
             project.name = options.projectName
+            project.remoteRepo = options.remoteRepo
         }
         else {
             throw new BadOptionsException()
