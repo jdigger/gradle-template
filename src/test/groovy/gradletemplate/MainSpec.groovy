@@ -32,9 +32,9 @@ class MainSpec extends Specification {
     }
 
 
-    def 'creates basic default project'() {
+    def 'creates basic groovy project'() {
         given:
-        CliOptions options = new CliOptions(['--X_testing', 'MainSpecTestProj'] as String[])
+        CliOptions options = new CliOptions(['--X_testing', '-g', 'MainSpecTestProj'] as String[])
 
         when:
         project = Main.createProject(options)
@@ -74,9 +74,30 @@ class MainSpec extends Specification {
     }
 
 
+    def 'creates basic Scala project'() {
+        given:
+        CliOptions options = new CliOptions(['--X_testing', '-s', 'MainSpecTestProj'] as String[])
+
+        when:
+        project = Main.createProject(options)
+
+        then:
+        project.name == 'MainSpecTestProj'
+        project.class == ScalaProject
+        options.testingMode
+        !options.remoteRepo
+
+        when:
+        project.build()
+
+        then:
+        project.mainScalaDir.exists()
+    }
+
+
     def 'creates basic remote Groovy project'() {
         given:
-        CliOptions options = new CliOptions(['--X_testing', '-g', '--remote', 'git@github.com:jdigger/testtesttest.git', 'MainSpecTestProj'] as String[])
+        CliOptions options = new CliOptions(['--X_testing', '-g', '--remote', 'git@github.com:daviesd/testtesttest.git', 'MainSpecTestProj'] as String[])
 
         when:
         project = Main.createProject(options)
@@ -85,7 +106,7 @@ class MainSpec extends Specification {
         project.name == 'MainSpecTestProj'
         project.class == GroovyProject
         options.testingMode
-        options.remoteRepo == 'git@github.com:jdigger/testtesttest.git'
+        options.remoteRepo == 'git@github.com:daviesd/testtesttest.git'
 
         when:
         use(NoopPushCommand) {

@@ -21,8 +21,9 @@ class CliOptions {
     private static CliBuilder createCliBuilder() {
         CliBuilder cli = new CliBuilder(usage: 'gradle-template [options] <projectName>')
         cli.h(longOpt: 'help', 'Show this help message')
-        cli.g(longOpt: 'groovy', 'Create a Groovy project (default)')
+        cli.g(longOpt: 'groovy', 'Create a Groovy project')
         cli.j(longOpt: 'java', 'Create a Java project')
+        cli.s(longOpt: 'scala', 'Create a Scala project')
         cli._(longOpt: 'X_testing', 'Create the project in a temporary directory')
         cli._(longOpt: 'remote', args: 1, argName: 'URL', 'URL to the remote repository')
         cli
@@ -76,8 +77,11 @@ class CliOptions {
         if (options.j) {
             JavaProject
         }
-        else {
+        else if(options.g) {
             GroovyProject
+        }
+        else {
+            ScalaProject
         }
     }
 

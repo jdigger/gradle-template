@@ -1,0 +1,45 @@
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'scala'
+
+group = 'THEGROUP'
+archivesBaseName = 'PROJECTNAME'
+
+sourceCompatibility = '1.6'
+
+dependencies {
+    compile "org.slf4j:jcl-over-slf4j:${slf4j_version}"
+    compile "org.slf4j:slf4j-api:${slf4j_version}"
+
+    runtime "ch.qos.logback:logback-classic:${logback_classic_version}"
+}
+
+// code-quality
+apply plugin: 'jdepend'
+apply plugin: 'pmd'
+
+// IDE support
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+
+afterEvaluate {
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives sourcesJar
+    }
+
+    javadoc {
+        title = "${name.charAt(0).toUpperCase()}${name.substring(1, name.length())} API ${version}"
+        if (file("src/main/scala/overview.html").exists()) {
+            options.overview = file("src/main/scala/overview.html").absolutePath
+        }
+        options.links = ["http://www.scala-lang.org/api/current/index.html#package"]
+    }
+}
