@@ -1,5 +1,12 @@
 repositories {
     mavenCentral()
+    maven {
+            url 'http://canoe-ventures.artifactoryonline.com/canoe_ventures/scala-tools'
+            credentials {
+                username = "${artifactoryUsername}"
+                password = "${artifactoryPassword}"
+            }
+        }
 }
 
 apply plugin: 'scala'
@@ -8,12 +15,17 @@ group = 'THEGROUP'
 archivesBaseName = 'PROJECTNAME'
 
 sourceCompatibility = '1.6'
+def scala_version = '2.9.1'
 
 dependencies {
+    scalaTools "org.scala-lang:scala-compiler:${scala_version}"
+    scalaTools "org.scala-lang:scala-library:${scala_version}"
+    compile "org.scala-lang:scala-library:${scala_version}"
     compile "org.slf4j:jcl-over-slf4j:${slf4j_version}"
     compile "org.slf4j:slf4j-api:${slf4j_version}"
 
     runtime "ch.qos.logback:logback-classic:${logback_classic_version}"
+    testCompile(group:"org.scalatest", name:"scalatest_2.9.1", version:"1.6.1")
 }
 
 // code-quality
