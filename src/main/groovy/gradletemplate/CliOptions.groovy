@@ -80,7 +80,7 @@ class CliOptions {
         else if(options.g) {
             GroovyProject
         }
-        else {
+        else if(options.s) {
             ScalaProject
         }
     }
