@@ -7,8 +7,16 @@ repositories {
                 password = "${artifactoryPassword}"
             }
         }
+    maven {
+            url 'http://canoe-ventures.artifactoryonline.com/canoe_ventures/scala-tools'
+            credentials {
+                username = "${artifactoryUsername}"
+                password = "${artifactoryPassword}"
+            }
+        }
 }
 
+apply plugin: 'java'
 apply plugin: 'scala'
 
 group = 'THEGROUP'
@@ -26,6 +34,7 @@ dependencies {
 
     runtime "ch.qos.logback:logback-classic:${logback_classic_version}"
     testCompile(group:"org.scalatest", name:"scalatest_2.9.1", version:"1.6.1")
+
 }
 
 // code-quality
@@ -55,3 +64,14 @@ afterEvaluate {
         options.links = ["http://www.scala-lang.org/api/current/index.html#package"]
     }
 }
+
+test.doLast {
+    ant.taskdef(name: 'scalatest',
+                classname: 'org.scalatest.tools.ScalaTestAntTask',
+                classpath: sourceSets.test.runtimeClasspath.asPath
+    )
+    ant.scalatest(runpath: sourceSets.test.classesDir,
+                  haltonfailure: 'true',
+                  fork: 'false') {reporter(type: 'stderr')}
+}
+
