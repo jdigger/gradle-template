@@ -1,9 +1,10 @@
 package gradletemplate
 
-import groovy.util.logging.Slf4j
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.PushCommand
 import org.eclipse.jgit.transport.PushResult
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -108,8 +109,9 @@ class MainSpec extends Specification {
     }
 
 
-    @Slf4j
     static class NoopPushCommand {
+        private static Logger log = LoggerFactory.getLogger(CliOptions)
+
         static Iterable<PushResult> call(PushCommand pushCommand) {
             log.debug "PushCommand called"
             null

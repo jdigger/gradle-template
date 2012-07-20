@@ -4,6 +4,10 @@ repositories {
         name 'jgit-repository'
         url 'http://download.eclipse.org/jgit/maven'
     }
+    maven {
+        name 'sonatype-repository'
+        url 'http://oss.sonatype.org/content/repositories/snapshots/'
+    }
 }
 
 apply plugin: 'groovy'

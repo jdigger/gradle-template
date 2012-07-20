@@ -1,9 +1,11 @@
 package gradletemplate
 
-import groovy.util.logging.Slf4j
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-@Slf4j
+
 class CliOptions {
+    private static Logger log = LoggerFactory.getLogger(CliOptions)
     private CliBuilder cli
 
     String projectName
@@ -31,10 +33,10 @@ class CliOptions {
 
     protected void parse(String[] args) {
         OptionAccessor options = cli.parse(args)
-        projectName = getProjectName(options)
-        projectClass = getProjectClass(options)
-        testingMode = getTestingMode(options)
-        remoteRepo = getRemoteRepo(options)
+        projectName = _getProjectName(options)
+        projectClass = _getProjectClass(options)
+        testingMode = _getTestingMode(options)
+        remoteRepo = _getRemoteRepo(options)
     }
 
 
@@ -54,7 +56,7 @@ class CliOptions {
     }
 
 
-    private static String getProjectName(OptionAccessor options) {
+    private static String _getProjectName(OptionAccessor options) {
         final List<String> arguments = options.arguments()
         final int argListLength = arguments.size()
 
@@ -72,7 +74,7 @@ class CliOptions {
     }
 
 
-    private static Class<? extends BaseProject> getProjectClass(OptionAccessor options) {
+    private static Class<? extends BaseProject> _getProjectClass(OptionAccessor options) {
         if (options.j) {
             JavaProject
         }
@@ -82,12 +84,12 @@ class CliOptions {
     }
 
 
-    private static boolean getTestingMode(OptionAccessor options) {
+    private static boolean _getTestingMode(OptionAccessor options) {
         options.X_testing
     }
 
 
-    private static String getRemoteRepo(OptionAccessor options) {
+    private static String _getRemoteRepo(OptionAccessor options) {
         !options.remote ? null : options.remote
     }
 

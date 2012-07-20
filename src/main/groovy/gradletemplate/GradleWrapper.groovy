@@ -1,10 +1,11 @@
 package gradletemplate
 
 import com.google.common.io.Files
-import groovy.util.logging.Slf4j
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-@Slf4j
 class GradleWrapper {
+    private static Logger log = LoggerFactory.getLogger(CliOptions)
 
     static def copy(BaseProject project) {
         List<File> scriptFiles = findScripts()
