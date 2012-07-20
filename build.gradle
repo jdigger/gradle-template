@@ -103,6 +103,6 @@ idea {
 // **************************************************************************
 
 task wrapper(type: Wrapper, group: 'Other', description: 'Creates the Gradle wrapper') {
-    gradleVersion = '1.0-milestone-8a'
+    gradleVersion = '1.0'
     jarFile = '.gradle-wrapper/gradle-wrapper.jar'
 }
